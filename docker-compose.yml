@@ -8,6 +8,7 @@
       qbittorrent-setup:
         build: ./build/
         image: qbittorrent-setup
+        pull_policy: build
         container_name: qbittorrent-setup
         volumes:
           - "${SSL}:/ssl"
@@ -15,6 +16,7 @@
     
       nginx:
         image: nginx:latest
+        pull_policy: always
         container_name: qbittorrent-nginx
         restart: always
         volumes:
@@ -29,6 +31,7 @@
     
       qbittorrent:
         image: lscr.io/linuxserver/qbittorrent:latest
+        pull_policy: always
         container_name: "qbittorrent-qbittorrent"
         environment:
           - "PUID=1000"
