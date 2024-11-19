@@ -1,20 +1,12 @@
-FROM alpine
+#!/bin/sh
 
-RUN \
-    echo "**** Update ****" && \
-    apk update
+KEY=/ssl/domain.key
+CRT=/ssl/domain.crt
 
-RUN \
-    echo "**** Install Packages ****" && \
-    apk add \
-        openssl
+NGINX=/nginx/nginx.conf
 
-COPY nginx.conf /nginx.conf
+if [ ! -f "$KEY" ] || [ ! -f "$CRT" ] ; then
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $KEY -out $CRT -subj "/C=CA"
+fi
 
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-VOLUME /ssl
-VOLUME /nginx
-
-CMD ["/start.sh"]
+cp /nginx.conf /nginx/nginx.conf
