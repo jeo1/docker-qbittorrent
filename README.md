@@ -1,6 +1,6 @@
 ### .env
 ```.env
-COMPOSE_PROJECT_NAME=plex
+COMPOSE_PROJECT_NAME=qbittorrent
 TIMEZONE=America/Toronto
 
 DOCKER_NETWORK=<name of docker network>
