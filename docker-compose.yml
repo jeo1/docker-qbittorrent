@@ -1,49 +1,16 @@
----
-networks:
-  macvlan_network:
-    external: true
-    name: "${DOCKER_NETWORK}"
-
 services:
-  qbittorrent-setup:
-    build: ./build/
-    image: qbittorrent-setup
-    pull_policy: build
-    container_name: qbittorrent-setup
-    volumes:
-      - "${SSL}:/ssl"
-      - "${NGINX}:/nginx"
-
-  nginx:
-    image: nginx:latest
-    pull_policy: always
-    container_name: qbittorrent-nginx
-    restart: always
-    volumes:
-      - "${NGINX}/nginx.conf:/etc/nginx/nginx.conf"
-      - "${SSL}:/ssl"
-    networks:
-      macvlan_network:
-        ipv4_address: "${IP_ADDRESS}"
-    depends_on:
-      qbittorrent-setup:
-        condition: service_completed_successfully
-
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     pull_policy: always
-    container_name: "qbittorrent-qbittorrent"
+    container_name: "qbittorrent"
     environment:
       - "PUID=1000"
       - "PGID=1000"
       - "TZ=${TIMEZONE}"
       - "WEBUI_PORT=8080"
     restart: always
-    network_mode: "service:nginx"
+    ports:
+      - "8081:8080"
     volumes:
       - "${QBITTORRENT_CONFIG}:/config"
       - "${DOWNLOADS}:/downloads"
-    depends_on:
-      nginx:
-        condition: service_started
-
