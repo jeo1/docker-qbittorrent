@@ -10,7 +10,7 @@ services:
       - "WEBUI_PORT=8080"
     restart: always
     ports:
-      - "8081:8080"
+      - "${QBITTORRENT_PORT}:8080"
     volumes:
       - "${QBITTORRENT_CONFIG}:/config"
-      - "${DOWNLOADS}:/downloads"
+      - "${QBITTORRENT_DOWNLOADS}:/downloads"
